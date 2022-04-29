@@ -42,7 +42,7 @@ Write-Host ""
 $TargetSessions
 Write-Host ""
 Write-Host ""
-$SessionToShadow = Read-Host "Enter the ID of the session you want to shadow. (Use the console session to watch what the user is doing.) "
+$SessionToShadow = Read-Host "Enter the ID of the session you want to shadow. (Use the console session to watch a user that is sitting at the computer, or use an rdp-tcp session to watch a remoted in user.) "
 
 If (!$SessionToShadow) {} else {
                         mstsc /v:$ShadowTarget /shadow:$SessionToShadow /NoConsentPrompt
