@@ -15,7 +15,19 @@
 
 Function Start_Shadow_RDP{
 Clear
-Write-Host ""
+
+$Title = @"
+
+
+░██████╗██╗░░██╗░█████╗░██████╗░░█████╗░░██╗░░░░░░░██╗  ██████╗░██████╗░██████╗░
+██╔════╝██║░░██║██╔══██╗██╔══██╗██╔══██╗░██║░░██╗░░██║  ██╔══██╗██╔══██╗██╔══██╗
+╚█████╗░███████║███████║██║░░██║██║░░██║░╚██╗████╗██╔╝  ██████╔╝██║░░██║██████╔╝
+░╚═══██╗██╔══██║██╔══██║██║░░██║██║░░██║░░████╔═████║░  ██╔══██╗██║░░██║██╔═══╝░
+██████╔╝██║░░██║██║░░██║██████╔╝╚█████╔╝░░╚██╔╝░╚██╔╝░  ██║░░██║██████╔╝██║░░░░░
+╚═════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═════╝░░╚════╝░░░░╚═╝░░░╚═╝░░  ╚═╝░░╚═╝╚═════╝░╚═╝░░░░░
+"@
+
+Write-Host $Title -ForegroundColor DarkMagenta
 Write-Host ""
 Write-Host "This script must be run on a computer that is in the same domain as the target computer." -ForegroundColor Red
 Write-Host ""
@@ -29,7 +41,7 @@ Write-Host ""
 $TargetSessions
 Write-Host ""
 Write-Host ""
-$SessionToShadow = Read-Host "Enter the ID of the session you want to shadow"
+$SessionToShadow = Read-Host "Enter the ID of the session you want to shadow. (Use the console session to watch what the user is doing.) "
 
 If (!$SessionToShadow) {} else {
                         mstsc /v:$ShadowTarget /shadow:$SessionToShadow /NoConsentPrompt
