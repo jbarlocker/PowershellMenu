@@ -11,7 +11,7 @@
 ##########################################################
 
 
-Function ResetLocalAdminPassword1 {
+Function ResetLocalAdminPassword {
 
 
 clear
