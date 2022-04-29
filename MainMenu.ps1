@@ -47,7 +47,7 @@ Function ListMenu{
 
          Remove-Variable MenuChoice -ErrorAction SilentlyContinue
          Clear-Host
-         Write-Host $MenuTitle -ForegroundColor Magenta
+         Write-Host $MenuTitle -ForegroundColor Cyan
          Write-Host ""
          Write-Host "===================================================================="
          Write-Host ""
