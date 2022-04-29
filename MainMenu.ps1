@@ -58,7 +58,7 @@ Function ListMenu{
          Write-Host ""
          $MenuChoice = Read-Host "Select an option"
      }
-    until ($MenuChoice -match '[1-3,qQ]')
+    until ($MenuChoice -match '[1-3,qQ,wtfWTF]')
     $Global:WindowsUpdates=$False
     $Global:DriverandFirmware=$False
     $Global:Confirm=$False
@@ -87,6 +87,10 @@ Function ListMenu{
 #>
     if($MenuChoice -imatch 'q'){
         Write-Host "Ending..." -ForegroundColor Red
+        EndScript
+    }
+        if($MenuChoice -imatch 'wtf'){
+        Start-Process https://www.youtube.com/watch?v=lUVQz6_-vxc
         EndScript
     }
 }#End of ShowMenu
