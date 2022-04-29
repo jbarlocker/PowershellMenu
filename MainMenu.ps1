@@ -60,7 +60,7 @@ Function ListMenu{
     if($MenuChoice -match 2){
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Sync_AD_and_AzureAD";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/Sync_AD_and_AzureAD.ps1'));SyncAllActiveDirectory
     }
-    if($MenuChoice -match 3){
+<#    if($MenuChoice -match 3){
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="FLEP";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/Choice3.ps1'));Invoke-Choice3function
     }
     if($MenuChoice -match 4){
@@ -75,7 +75,7 @@ Function ListMenu{
     if($MenuChoice -match 7){
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="RunCluChk";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DellProSupportGse/Tools/main/RunCluChk.ps1'));Invoke-RunCluChk
     }
-
+#>
     if($MenuChoice -imatch 'q'){
         Write-Host "Ending..." -ForegroundColor Red
         EndScript
