@@ -21,6 +21,8 @@ Function EndScript{
 
 Function Master-Menu{
 Clear-Host
+
+# https://fsymbols.com/generators/carty/
 $MenuTitle = @"
 ██████╗░░█████╗░░██╗░░░░░░░██╗███████╗██████╗░░██████╗██╗░░██╗███████╗██╗░░░░░██╗░░░░░███╗░░░███╗███████╗███╗░░██╗██╗░░░██╗
 ██╔══██╗██╔══██╗░██║░░██╗░░██║██╔════╝██╔══██╗██╔════╝██║░░██║██╔════╝██║░░░░░██║░░░░░████╗░████║██╔════╝████╗░██║██║░░░██║
@@ -48,14 +50,14 @@ Function ListMenu{
          Write-Host "Enter '2' - Sync all domain controllers, then sync to AzureAD"
          Write-Host "Enter '3' - Create a new user"
          Write-Host "Enter '4' - Delete a user"
-         Write-Host "Enter '5' - Choice5"
-         Write-Host "Enter '6' - Choice6"
-         Write-Host "Enter '7' - Choice7"
+         #Write-Host "Enter '5' - Choice5"
+         #Write-Host "Enter '6' - Choice6"
+         #Write-Host "Enter '7' - Choice7"
          Write-Host "Enter 'Q' to Quit"
          Write-Host ""
          $MenuChoice = Read-Host "Select an option"
      }
-    until ($MenuChoice -match '[1-7,qQ]')
+    until ($MenuChoice -match '[1-2,qQ]')
     $Global:WindowsUpdates=$False
     $Global:DriverandFirmware=$False
     $Global:Confirm=$False
