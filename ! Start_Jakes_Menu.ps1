@@ -1,4 +1,12 @@
-﻿
+﻿############################################################
+###   
+###   Created by:  Jake Barlocker
+###   Created on:  29-APR-2022
+###   
+###   
+###   
+############################################################
+
 
 
 # Self-elevate the script if required
@@ -20,6 +28,7 @@ if ($JoinedToDomain -eq $False) {
                                     Write-Host "This computer needs to be joined to a domain." -ForegroundColor Red
                                     Write-Host ""
                                     Write-Host ""
+                                    pause
                                     break
                                   } else {
                                           Write-Host ""
@@ -27,15 +36,24 @@ if ($JoinedToDomain -eq $False) {
                                           Write-Host ""
                                           }
 
+
+# Get Operating System name
+$OsName = (Get-WMIObject win32_operatingsystem).caption
+
+
 # Check to see if RSAT tools are installed, and install them if they arent.
-$RsatToolList = Get-WindowsCapability -Name RSAT* -Online | Select-Object -Property *
-foreach ($Tool in $RsatToolList){
-                                    if ($Tool.State -eq 'NotPresent') {
-                                                                        $ToolName = $Tool.Name
-                                                                        Write-Host "Installing $ToolName" -ForegroundColor Yellow
-                                                                        Add-WindowsCapability -Online -Name $ToolName
-                                                                    }
-                                 }
+if ($OsName -notlike "*server*") {
+                                  $RsatToolList = Get-WindowsCapability -Name RSAT* -Online | Select-Object -Property *
+                                  foreach ($Tool in $RsatToolList){
+                                                                   if ($Tool.State -eq 'NotPresent') {
+                                                                                                      $ToolName = $Tool.Name
+                                                                                                      Write-Host "Installing $ToolName" -ForegroundColor Yellow
+                                                                                                      Add-WindowsCapability -Online -Name $ToolName
+                                                                                                      }
+                                                                   }
+                                 } ELSE {
+                                         Install-WindowsFeature RSAT
+                                         }
 
 
 
