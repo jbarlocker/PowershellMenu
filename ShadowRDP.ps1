@@ -17,10 +17,10 @@ Function Start_Shadow_RDP{
 Clear
 Write-Host ""
 Write-Host ""
-Write-Host "This script must be run on a computer in the checkcity.local domain." -ForegroundColor Red
+Write-Host "This script must be run on a computer that is in the same domain as the target computer." -ForegroundColor Red
 Write-Host ""
 Write-Host ""
-$ShadowTarget = Read-Host "What workstation do you want to shadow?  (example: u210w6.checkcity.local) "
+$ShadowTarget = Read-Host "What system do you want to shadow?  (example: hostname.domain.local) "
 
 
 
