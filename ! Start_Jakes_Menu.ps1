@@ -9,7 +9,15 @@
 
 
 clear
-Write-Host "This Script Must be run as Administrator!" -ForegroundColor Yellow
+
+# Check to see if powershell is running as an admin, and if not then stop the script.
+    if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+            Write-Host ""
+            Write-Host "This Script Must be run as Administrator!" -ForegroundColor Yellow;
+            Write-Host ""
+            break;
+            } ELSE {
+
 
 
 # Check to see if the local computer is a member of a domain.
@@ -54,5 +62,5 @@ if ($OsName -notlike "*server*") {
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="ListMenu";$repo="PowershellMenu"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/CC_MainMenu.ps1'));Master-Menu 
 
 
-
+}
 
