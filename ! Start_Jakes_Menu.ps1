@@ -8,12 +8,8 @@
 ############################################################
 
 
-# This is supposed to make Powershell run as an administrator (it will have User Account Control pop-up a window asking for access to be given)
-If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
-{   
-$arguments = "& '" + $myinvocation.mycommand.definition + "'"
-Start-Process powershell -Verb runAs -ArgumentList $arguments
-}
+clear
+Write-Host "This Script Must be run as Administrator!" -ForegroundColor Yellow
 
 
 # Check to see if the local computer is a member of a domain.
@@ -50,6 +46,7 @@ if ($OsName -notlike "*server*") {
                                  } ELSE {
                                          Install-WindowsFeature RSAT
                                          }
+
 
 
 
