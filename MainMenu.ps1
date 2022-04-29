@@ -39,7 +39,7 @@ Function ListMenu{
          Write-Host "===================================================================="
          Write-Host ""
          Write-Host "Enter '1' to Choice1      - Shadow RDP into a computer"
-         Write-Host "Enter '2' to Choice2      - Get Windows Updates on a remote computer"
+         Write-Host "Enter '2' to Choice2      - Sync all domain controllers, then sync to AzureAD"
          Write-Host "Enter '3' to Choice3      - Create a new user"
          Write-Host "Enter '4' to Choice4      - Delete a user"
          Write-Host "Enter '5' to Choice5      - Choice5"
@@ -58,7 +58,7 @@ Function ListMenu{
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="ShadowRDP";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/ShadowRDP.ps1'));Start_Shadow_RDP
     }
     if($MenuChoice -match 2){
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="DART";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/Choice2.ps1'));Invoke-Choice2function
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Sync_AD_and_AzureAD";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/Sync_AD_and_AzureAD.ps1'));SyncAllActiveDirectory
     }
     if($MenuChoice -match 3){
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="FLEP";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/Choice3.ps1'));Invoke-Choice3function
