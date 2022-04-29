@@ -54,6 +54,7 @@ $AllNonServerComputers = Get-ADComputer -Filter 'operatingsystem -notlike "*serv
 
 
 # Invoke PSSessions on remote computers (as a job - to run concurrently) to reset the administrator password
+Write-Host "Invoking Jobs on all workstation computers to reset passwords." -ForegroundColor Magenta
 $Sessions = New-PSSession -ComputerName ($AllNonServerComputers.Name) -Credential $DomainAdminCredential -ThrottleLimit 16
 Invoke-Command -Session $Sessions -ScriptBlock {
                                                 #Set the Username for the account that the I.T. Dept will use
