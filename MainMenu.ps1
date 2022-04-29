@@ -34,7 +34,7 @@ $MenuTitle = @"
 
 
 by: Jake Barlocker
-
+==================================================================================
 "@
 Function ListMenu{
     do
@@ -43,8 +43,6 @@ Function ListMenu{
          Remove-Variable MenuChoice -ErrorAction SilentlyContinue
          Clear-Host
          Write-Host $MenuTitle -ForegroundColor Cyan
-         Write-Host ""
-         Write-Host "===================================================================="
          Write-Host ""
          Write-Host "Enter '1' to Choice1      - Shadow RDP into a computer"
          Write-Host "Enter '2' to Choice2      - Sync all domain controllers, then sync to AzureAD"
