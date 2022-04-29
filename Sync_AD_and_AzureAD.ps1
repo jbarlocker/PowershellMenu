@@ -30,7 +30,7 @@ Write-Host ""
 Write-Host "This Must be run on a Domain Controller" -ForegroundColor Red
 Write-Host ""
 Write-Host ""
-Write-Host "Synchronizating on Domain Controllers..." -ForegroundColor Magenta
+Write-Host "Synchronizing Domain Controllers..." -ForegroundColor Magenta
 
 # replicate all domain controllers
 (Get-ADDomainController -Filter *).Name | Foreach-Object {repadmin /syncall $_ (Get-ADDomain).DistinguishedName /e /A | Out-Null}; Start-Sleep 10; Get-ADReplicationPartnerMetadata -Target "$env:userdnsdomain" -Scope Domain | Select-Object Server, LastReplicationSuccess
