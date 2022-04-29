@@ -2,6 +2,8 @@
 
 function SyncAllActiveDirectory {
 
+clear
+
 Write-Host "Initiating Synchronizations on Domain Controllers..." -ForegroundColor Green
 
 # replicate all domain controllers
