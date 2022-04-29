@@ -11,7 +11,7 @@
 ##########################################################
 
 
-Function ResetLocalAdminPassword {
+Function ResetLocalAdminPassword1 {
 
 
 clear
@@ -42,8 +42,8 @@ Write-Host ""
 $DomainAdminCredential = Get-Credential -Message "Enter a Domain Admin credential."
 
 # Get the new password for the Administrator account
-$NewAdministratorPassword = Read-Host "Enter the new password for the Administrator account"
-$NewITPassword = Read-Host "Enter the new password for the IT account"
+$NewAdministratorPassword = Read-Host "Enter the new password for the Administrator account. (The Administrator user will be disabled)"
+$NewITPassword = Read-Host "Enter the new password for the IT account (The IT account will be a local admin)"
 
 # Get a list of all client computers
 $AllNonServerComputers = Get-ADComputer -Filter 'operatingsystem -notlike "*server*" -and enabled -eq "true"' ` -Properties Name,Operatingsystem,OperatingSystemVersion,IPv4Address | Sort-Object -Property Operatingsystem | Select-Object -Property Name,Operatingsystem,OperatingSystemVersion,IPv4Address
@@ -106,6 +106,6 @@ Remove-PSSession -Session (Get-PSSession)
 $s = Get-PSSession
 Remove-PSSession -Session $s
 
-
+Write-Host "Completed." -ForegroundColor Green
 
 }
