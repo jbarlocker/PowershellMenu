@@ -4,6 +4,11 @@ function SyncAllActiveDirectory {
 
 clear
 
+Write-Host ""
+Write-Host ""
+Write-Host "This Must be run on a Domain Controller" -ForegroundColor Red
+Write-Host ""
+Write-Host ""
 Write-Host "Initiating Synchronizations on Domain Controllers..." -ForegroundColor Magenta
 
 # replicate all domain controllers
