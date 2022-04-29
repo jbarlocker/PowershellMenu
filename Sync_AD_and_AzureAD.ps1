@@ -13,6 +13,9 @@ Write-Host ""
 Write-Host "Complete." -ForegroundColor Green
 
 Write-Host ""
+Write-Host ""
+Write-Host ""
+Write-Host ""
 Write-Host "Initiating Synchronizations to Azure Active Directory..." -ForegroundColor Magenta
 
 #Import modeult to sunc to Azure AD
@@ -25,7 +28,6 @@ Start-ADSyncSyncCycle -PolicyType Delta
 #Start-ADSyncSyncCycle -PolicyType Initial
 
 
-Write-Host ""
 Write-Host "Complete." -ForegroundColor Green
 
 
