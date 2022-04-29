@@ -23,7 +23,7 @@ Function Master-Menu{
 Clear-Host
 
 # https://fsymbols.com/generators/carty/
-$MenuTitle = @"
+$Title = @"
 
 ██████╗░░█████╗░░██╗░░░░░░░██╗███████╗██████╗░░██████╗██╗░░██╗███████╗██╗░░░░░██╗░░░░░███╗░░░███╗███████╗███╗░░██╗██╗░░░██╗
 ██╔══██╗██╔══██╗░██║░░██╗░░██║██╔════╝██╔══██╗██╔════╝██║░░██║██╔════╝██║░░░░░██║░░░░░████╗░████║██╔════╝████╗░██║██║░░░██║
@@ -45,7 +45,7 @@ Function ListMenu{
 
          Remove-Variable MenuChoice -ErrorAction SilentlyContinue
          Clear-Host
-         Write-Host $MenuTitle -ForegroundColor Cyan
+         Write-Host $Title -ForegroundColor Cyan
          Write-Host ""
          Write-Host "Enter '1' - Shadow RDP into a computer"
          Write-Host "Enter '2' - Sync all domain controllers, then sync to AzureAD"
