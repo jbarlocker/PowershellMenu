@@ -51,7 +51,7 @@ Function ListMenu{
          Write-Host "Enter '1' - Shadow RDP into a computer"
          Write-Host "Enter '2' - Sync all domain controllers, then sync to AzureAD"
          Write-Host "Enter '3' - Reset the Local Admin Password on all domain joined computers"
-         #Write-Host "Enter '4' - Delete a user"
+         Write-Host "Enter '4' - Scan domain servers for expiring certificates"
          #Write-Host "Enter '5' - Choice5"
          #Write-Host "Enter '6' - Choice6"
          #Write-Host "Enter '7' - Choice7"
@@ -59,7 +59,7 @@ Function ListMenu{
          Write-Host ""
          $MenuChoice = Read-Host "Select an option"
      }
-    until ($MenuChoice -match '[1-3,qQ,wtfWTF]')
+    until ($MenuChoice -match '[1-4,qQ,wtfWTF]')
     $Global:WindowsUpdates=$False
     $Global:DriverandFirmware=$False
     $Global:Confirm=$False
@@ -73,10 +73,10 @@ Function ListMenu{
     if($MenuChoice -match 3){
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Reset_Local_Admin_Passwords";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/Reset_Local_Admin_Passwords.ps1'));ResetLocalAdminPassword
     }
-<#    if($MenuChoice -match 4){
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="FLCkr";$repo="PowershellScripts"'+(new-object System.net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/Choice4.ps1'));Invoke-Choice4function
+    if($MenuChoice -match 4){
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Scan_Domain_Servers_for_Expiring_Certificates";$repo="PowershellScripts"'+(new-object System.net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/Scan_Domain_Servers_for_Expiring_Certificates.ps1'));Scan_for_Certs
     }
-    if($MenuChoice -match 5){
+<#    if($MenuChoice -match 5){
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="LogCollector";$repo="PowershellScripts"'+(new-object System.net.webclient).DownloadString('https://raw.githubusercontent.com/DellProSupportGse/Tools/main/LogCollector.ps1'));Invoke-LogCollector
     }
     if($MenuChoice -match 6){
