@@ -42,7 +42,7 @@ Write-Host "Scanning... (this may take some time)" -ForegroundColor Cyan
 $serverlist= (Get-ADComputer -LDAPFilter "(&(objectCategory=computer)(operatingSystem=Windows Server*) (!serviceprincipalname=*MSClusterVirtualServer*) (!(userAccountControl:1.2.840.113556.1.4.803:=2)))").Name
 
 # create an array variable to be used
-Remove-Variable array
+Remove-Variable array -ErrorAction SilentlyContinue
 $array=@()
 
 # iterate commands on all servers
