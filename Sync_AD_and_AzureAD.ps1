@@ -73,7 +73,7 @@ foreach ($DomainController in $DomainControllers) {
                                                             
                                                             # replicate to Azure AD (full sync)
                                                             #Start-ADSyncSyncCycle -PolicyType Initial
-                                                            }
+                                                            } -ErrorAction SilentlyContinue
 
                                                    }
 
