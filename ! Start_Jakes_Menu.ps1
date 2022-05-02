@@ -15,6 +15,7 @@ clear
             Write-Host ""
             Write-Host "This Script Must be run as Administrator!" -ForegroundColor Yellow;
             Write-Host ""
+            pause
             break;
             } ELSE {
 
