@@ -78,7 +78,7 @@ foreach ($DomainController in $DomainControllers) {
                                                    }
 
 # write the hostname of the server with AD Sync installed to the console
-Write-Host "Syncing from $DcRunningAdSync" -ForegroundColor Magenta
+#Write-Host "Syncing from $DcRunningAdSync" -ForegroundColor Magenta
 
 <#
 # Run the commands on the remote DC to initiate an AD Sync to AzureAD
