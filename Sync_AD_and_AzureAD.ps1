@@ -55,17 +55,32 @@ $DcRunningAdSync = $null
 
 # Scan each DC for the AD Sync program
 foreach ($DomainController in $DomainControllers) {
-                                                    $SyncProgram = Get-WmiObject Win32_Product -ComputerName $DomainController | select Name,Version | Where-Object {$_.Name -like "*AD Replication Status*"}
+                                                    <#$SyncProgram = Get-WmiObject Win32_Product -ComputerName $DomainController | select Name,Version | Where-Object {$_.Name -like "*AD Replication Status*"}
                                                     
                                                     # if sync program is found then populate a variable with the hostname of the server
                                                     If ($SyncProgram -ne $null) {
                                                                                  $DcRunningAdSync = $DomainController
                                                                                  }
+                                                    #>
+
+                                                    # Run the commands on the remote DC to initiate an AD Sync to AzureAD
+                                                    Invoke-Command -ComputerName $DcRunningAdSync -ScriptBlock {
+                                                            #Import modeult to sunc to Azure AD
+                                                            Import-Module ADSync;
+
+                                                            # replicate to Azure AD (sync changes)
+                                                            Start-ADSyncSyncCycle -PolicyType Delta;
+                                                            
+                                                            # replicate to Azure AD (full sync)
+                                                            #Start-ADSyncSyncCycle -PolicyType Initial
+                                                            }
+
                                                    }
 
 # write the hostname of the server with AD Sync installed to the console
 Write-Host "Syncing from $DcRunningAdSync" -ForegroundColor Magenta
 
+<#
 # Run the commands on the remote DC to initiate an AD Sync to AzureAD
 Invoke-Command -ComputerName $DcRunningAdSync -ScriptBlock {
                                                             #Import modeult to sunc to Azure AD
@@ -77,6 +92,8 @@ Invoke-Command -ComputerName $DcRunningAdSync -ScriptBlock {
                                                             # replicate to Azure AD (full sync)
                                                             #Start-ADSyncSyncCycle -PolicyType Initial
                                                             }
+#>
+
                                                             
 Write-Host "Command Sent. Syncing to AzureAD should be complete in the next few minutes." -ForegroundColor Green
 
