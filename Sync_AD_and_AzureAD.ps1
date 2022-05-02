@@ -64,7 +64,7 @@ foreach ($DomainController in $DomainControllers) {
                                                     #>
 
                                                     # Run the commands on the remote DC to initiate an AD Sync to AzureAD
-                                                    Invoke-Command -ComputerName $DcRunningAdSync -ScriptBlock {
+                                                    Invoke-Command -ComputerName $DomainController -ScriptBlock {
                                                             #Import modeult to sunc to Azure AD
                                                             Import-Module ADSync;
 
