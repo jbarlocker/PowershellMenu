@@ -55,7 +55,7 @@ Write-Host ""
 Write-Host ""
 
 
-clear
+#clear
 $Number_of_domains_to_scan = Read-Host "How many domains do you want to scan?"
 $Counter = 0
 
