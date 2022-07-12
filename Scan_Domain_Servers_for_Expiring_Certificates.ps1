@@ -11,6 +11,13 @@
 function Scan_for_Certs {
 
 
+# Install the module "importexcel"
+    #Set-PSRepository -Name PowerShellGallery -SourceLocation 'https://www.powershellgallery.com/api/v2' -InstallationPolicy Trusted
+    Install-PackageProvider -Name NuGet -Force
+    Find-Module importexcel | Install-Module -Force
+
+
+
 clear
 
 # https://fsymbols.com/generators/carty/
@@ -63,6 +70,22 @@ While ($Counter -ne ($List_Of_Domains.Count)) {
                                                $Credentials += Get-Credential -Message "Enter Credentials for $CurrentDomain" -UserName $Domain_User_Prepopulate
                                                $Counter++
                                        }
+
+################################################
+# Get a name and place for saved file
+################################################
+# Instatiate a save file dialog box
+    Add-Type -AssemblyName System.Windows.Forms
+    $FileBrowser = New-Object System.Windows.Forms.SaveFileDialog -Property @{ 
+        InitialDirectory = [Environment]::GetFolderPath('Desktop') 
+        #Filter = 'Documents (*.docx)|*.docx|SpreadSheet (*.xlsx)|*.xlsx'
+        Filter = 'SpreadSheet (*.xlsx)|*.xlsx'
+    }
+    $null = $FileBrowser.ShowDialog()
+
+# Generate a variable that contains the full path to save the new file
+$FilePath = $FileBrowser.FileName
+
 
 
 ################################################
@@ -163,12 +186,13 @@ While ($Counter -lt $List_Of_Domains.Count) {
 
 
 
-# Print the array
-Write-Output $Certificates | Sort-Object "Expiry Date",Certificate | ft
+## Print the array
+#Write-Output $Certificates | Sort-Object "Expiry Date",Certificate | ft
 
 
 
-
+# Dump the array to an excel file
+$Certificates | Export-Excel -Path $FilePath -TitleBold -WorksheetName ExpiringCertificates -AutoSize
 
 
 
