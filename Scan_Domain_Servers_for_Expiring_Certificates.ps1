@@ -174,5 +174,5 @@ Write-Output $Certificates | Sort-Object "Expiry Date",Certificate | ft
 Get-PSSession | Remove-PSSession
 
 
-
+}
 
