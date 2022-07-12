@@ -141,7 +141,8 @@ While ($Counter -lt $List_Of_Domains.Count) {
 
                                                                                $CurrentDomain = $List_Of_Domains[$Counter]
                                                                                $TotalDomainNumber = $List_Of_Domains.count
-                                                                               Write-Host $CurrentDomain - $Counter of $TotalDomainNumber -ForegroundColor Green
+                                                                               $CounterPlusOne = $Counter + 1
+                                                                               Write-Host $CurrentDomain - $CounterPlusOne of $TotalDomainNumber -ForegroundColor Green
 
                                                                                # Get a list of all certs expiring in XXX days or less
                                                                                $RemoteCertificate = Invoke-Command -Credential $Credentials[$Counter] -ComputerName $server -ArgumentList $ExpiringInNumberOfDays { Param( $ExpiringInNumberOfDays ); Get-ChildItem -Path Cert:\LocalMachine\My -Recurse -ExpiringInDays $ExpiringInNumberOfDays}                                    
