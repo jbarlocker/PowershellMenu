@@ -11,10 +11,26 @@
 function Scan_for_Certs {
 
 
-# Install the module "importexcel"
-    #Set-PSRepository -Name PowerShellGallery -SourceLocation 'https://www.powershellgallery.com/api/v2' -InstallationPolicy Trusted
-    Install-PackageProvider -Name NuGet -Force
-    Find-Module importexcel | Install-Module -Force
+# Cheack for NuGet and ImportExcel, then install them if they are missing
+    clear
+    if (Get-PackageProvider -ListAvailable -Name NuGet) {
+                                                         clear
+                                                         Write-Host "NuGet is already installed" -ForegroundColor Green
+                                                         Write-Host " "
+                                                         } else {
+                                                                 clear
+                                                                 Write-Host "Installing NuGet" -ForegroundColor Yellow
+                                                                 Write-Host " "
+                                                                 Install-PackageProvider -Name NuGet -Force
+                                                                 }
+    if (Get-Module -ListAvailable -Name importexcel) {
+                                                      Write-Host "importexcel is already installed" -ForegroundColor Green
+                                                      Write-Host " "
+                                                      } else {
+                                                              Write-Host "Installing importexcel" -ForegroundColor Yellow
+                                                              Write-Host " "
+                                                              Find-Module importexcel | Install-Module -Force
+                                                              }
 
 
 
