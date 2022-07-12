@@ -34,7 +34,7 @@ function Scan_for_Certs {
 
 
 
-clear
+#clear
 
 # https://fsymbols.com/generators/carty/
 $Title = @"
