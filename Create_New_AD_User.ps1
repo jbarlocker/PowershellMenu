@@ -219,6 +219,7 @@ New-ADUser `
     -SamAccountName $Sam `
     -UserPrincipalName "$Sam@checkcity.com"
 
+Sleep -Seconds 5
 
 ##### Assign group membership to new user
 $TemplateUserGroups | Add-ADGroupMember -Members $Sam
