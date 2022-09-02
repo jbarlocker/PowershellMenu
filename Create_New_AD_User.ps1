@@ -156,7 +156,7 @@ $NewUserTempPassword = Scramble-String $password
 Write-Host " "
 Write-Host " "
 Write-Host "Connecting to ExchangeOnline..." -ForegroundColor Cyan
-Connect-MsolService
+Connect-MsolService -ErrorAction Stop
 
 
 
