@@ -1,4 +1,4 @@
-﻿################################################
+################################################
 ###   
 ###   This script will create a new user for CheckCity
 ###   
@@ -7,27 +7,32 @@
 ###   
 ###   
 ###   Edits:
-###   5-AUG-2022: Jake Barlocker - finalizing script and adding O365 code to create email accounts.
-###   8-AUG-2022: Jake Barlocker - fixing AD to O365 sync and adding license to account in o365
+###   05-AUG-2022: Jake Barlocker - finalizing script and adding O365 code to create email accounts.
+###   08-AUG-2022: Jake Barlocker - fixing AD to O365 sync and adding license to account in o365
+###   10-AUG-2022: Jake Barlocker - building query for source account's o365 licenses and adding the same licenses to the new user.
 ###   
 ###   
 ###   
 ###   
 ###   
 ###   
-###   
+###   To Do: - Add logging to an excel file
+###          - email the operator of this script when a license cant be applied due to lack of available licenses.
+###          - remove trailing space character on first name if entered
+###          - 
+###          - 
+###          - 
 ###   
 ###   
 ################################################
 
 
-Function Create_New_AD_User {
 
+Function Create_New_AD_User {
 
 clear
 
 
-$NewUserTempPassword = "Ch3ckcity!"
 
 
 # Check to see if powershell is running as an admin, and if not then stop the script.
@@ -37,7 +42,7 @@ $NewUserTempPassword = "Ch3ckcity!"
             Write-Host ""
             pause
             break;
-            }
+            } ELSE {
 
 
 
@@ -89,16 +94,39 @@ clear
                                                               Write-Host " "
                                                               Find-Module ExchangeOnlineManagement  | Install-Module -Force
                                                               }
+    if (Get-Module -ListAvailable -Name ImportExcel ) {
+                                                      Write-Host " "
+                                                      Write-Host "ImportExcel  is already installed" -ForegroundColor Green
+                                                      Write-Host " "
+                                                      } else {
+                                                              Write-Host "Installing ImportExcel " -ForegroundColor Yellow
+                                                              Write-Host " "
+                                                              Find-Module ImportExcel  | Install-Module -Force
+                                                              }
+
+
+Function Sync-DC_and_Azure {
+    ##### Set ccc7dc01 to sync all domain controllers, then sync to azureAD
+    Write-Host ""
+    Write-Host "Syncing all Active Directory Domain Controllers..." -ForegroundColor Yellow
+    Invoke-Command -ComputerName ccc7dc01.checkcity.local -FilePath "\\ccc7dc01.checkcity.local\c$\Windows\Scripts\SYNC all DCs and Azure AD.ps1" | ft
+    Write-Host "Syncing from Active Directory to AzureAD..." -ForegroundColor Yellow
+    }
 
 
 # Find out who is running this script
 $OperatorDomainAndUsername = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 $OperatorUsername = $OperatorDomainAndUsername.Split('\')
-$OperatorIdentity = Get-ADUser -Identity $OperatorUsername[1]
+$OperatorIdentity = Get-ADUser -Identity $OperatorUsername[1] -Properties *
 $OperatorFirstName = $OperatorIdentity.GivenName
 $OperatorLastName = $OperatorIdentity.Surname
 
-<#
+
+# Get Date and Time
+$Date = Get-Date -Format "dddd MM/dd/yyyy"
+$Time = Get-Date -Format "HH:mm (K)"
+
+
 # Generate a Random Password
 function Get-RandomCharacters($length, $characters) {
     $random = 1..$length | ForEach-Object { Get-Random -Maximum $characters.length }
@@ -116,7 +144,9 @@ $password += Get-RandomCharacters -length 2 -characters 'ABCDEFGHKLMNOPRSTUVWXYZ
 $password += Get-RandomCharacters -length 2 -characters '1234567890'
 $password += Get-RandomCharacters -length 2 -characters '!$%&/()=?}][{@#*+' 
 $NewUserTempPassword = Scramble-String $password
-#>
+
+
+
 
 
 
@@ -127,6 +157,8 @@ Write-Host " "
 Write-Host " "
 Write-Host "Connecting to ExchangeOnline..." -ForegroundColor Cyan
 Connect-MsolService
+
+
 
 
 
@@ -206,7 +238,9 @@ Write-Host ""
 Write-Host "Username will be:   $Sam" -ForegroundColor Green
 
 
+
 ##### Create the new AD User account with only the most basic info
+Write-Host "Creating user account..." -ForegroundColor Yellow
 New-ADUser `
     -Name "$FirstName $LastName" `
     -AccountPassword (ConvertTo-SecureString $NewUserTempPassword -AsPlainText -Force) `
@@ -219,7 +253,9 @@ New-ADUser `
     -SamAccountName $Sam `
     -UserPrincipalName "$Sam@checkcity.com"
 
-Sleep -Seconds 5
+
+Sync-DC_and_Azure
+
 
 ##### Assign group membership to new user
 $TemplateUserGroups | Add-ADGroupMember -Members $Sam
@@ -229,26 +265,25 @@ $NewlyCreatedUser = Get-ADUser $Sam -Properties *
 
 
 ##### Populate account fields if available
-If ($TemplateUserObject.Title -ne $null){ $NewlyCreatedUser | Set-ADUser -Title $TemplateUserObject.Title }
-If ($TemplateUserObject.Department -ne $null){ $NewlyCreatedUser | Set-ADUser -Department $TemplateUserObject.Department }
-If ($TemplateUserObject.Manager -ne $null){ $NewlyCreatedUser | Set-ADUser -Manager $TemplateUserObject.Manager }
-If ($TemplateUserObject.Company -ne $null){ $NewlyCreatedUser | Set-ADUser -Company $TemplateUserObject.Company }
-If ($TemplateUserObject.Description -ne $null){ $NewlyCreatedUser | Set-ADUser -Description $TemplateUserObject.Description }
-If ($TemplateUserObject.Office -ne $null){ $NewlyCreatedUser | Set-ADUser -Office $TemplateUserObject.Office }
-If ($CellPhoneNumber -ne ""){ $NewlyCreatedUser | Set-ADUser -MobilePhone $CellPhoneNumber } 
+Write-Host ""
+Write-Host "Copying user metadata..." -ForegroundColor Yellow
+If ($TemplateUserObject.Title){ Set-ADUser -Identity $Sam -Title $TemplateUserObject.Title }
+If ($TemplateUserObject.Department){ Set-ADUser -Identity $Sam -Department $TemplateUserObject.Department }
+If ($TemplateUserObject.Manager){ Set-ADUser -Identity $Sam -Manager $TemplateUserObject.Manager }
+If ($TemplateUserObject.Company){ Set-ADUser -Identity $Sam -Company $TemplateUserObject.Company }
+If ($TemplateUserObject.Description){ Set-ADUser -Identity $Sam -Description $TemplateUserObject.Description }
+If ($TemplateUserObject.Office){ Set-ADUser -Identity $Sam -Office $TemplateUserObject.Office }
+If ($CellPhoneNumber -ne ""){ Set-ADUser -Identity $Sam -MobilePhone $CellPhoneNumber } 
 
 $EmailAddress = $NewlyCreatedUser.UserPrincipalName
-$NewlyCreatedUser | Set-ADUser -email $EmailAddress
-$NewlyCreatedUser | Set-ADUser -add @{ProxyAddresses="SMTP:$EmailAddress"}
-
-
-
-##### Set ccc7dc01 to sync all domain controllers, then sync to azureAD
 Write-Host ""
-Write-Host "Syncing all Active Directory Domain Controllers..." -ForegroundColor Yellow
-Invoke-Command -ComputerName ccc7dc01.checkcity.local -FilePath "\\ccc7dc01.checkcity.local\c$\Windows\Scripts\SYNC all DCs and Azure AD.ps1" | ft
-Write-Host "Syncing from Active Directory to AzureAD..." -ForegroundColor Yellow
+Write-Host "Generating email address..." -ForegroundColor Yellow
+Write-Host ""
+Set-ADUser -Identity $Sam -email $EmailAddress
+Set-ADUser -Identity $Sam -add @{ProxyAddresses="SMTP:$EmailAddress"}
 
+
+Sync-DC_and_Azure
 
 ##### Sleep while Active Directory syncs to AzureAD
 sleep -Seconds 90
@@ -267,16 +302,18 @@ sleep -Seconds 90
     Set-MsolUser -UserPrincipalName $EmailAddress -UsageLocation "US"
 
     # Add O365 Licenses
-    Remove-Variable FailedSkus
+    Remove-Variable FailedSkus -ErrorAction SilentlyContinue
     $FailedSkus = @()
     Foreach ($Sku in $AllO365Skus) {
                                     $SkuName = $Sku.AccountSkuId
                                     $UsersOfSku = Get-MsolUser -All | Where-Object {($_.licenses).AccountSkuId -match $Sku.AccountSkuId}
                                     If ($UsersOfSku.DisplayName -contains $TemplateUserObject.DisplayName) {
-                                                                                                            Set-MsolUserLicense -UserPrincipalName $EmailAddress -AddLicenses $Sku.AccountSkuId
+                                                                                                            Set-MsolUserLicense -UserPrincipalName $EmailAddress -AddLicenses $Sku.AccountSkuId -ErrorAction SilentlyContinue
                                                                                                             If ($Sku.ActiveUnits -eq $Sku.ConsumedUnits) { 
                                                                                                                                                           $FailedSkus += $SkuName
-                                                                                                                                                          Write-Host "$EmailAddress was NOT given the $FailedSkus license! There are none available." -ForegroundColor Red
+                                                                                                                                                          Write-Host ""
+                                                                                                                                                          Write-Host "$EmailAddress was NOT given the --$SkuName-- license! There are none available." -ForegroundColor Red
+                                                                                                                                                          Write-Host ""
                                                                                                                                                           }
                                                                                                       }
                                     }
@@ -285,10 +322,11 @@ sleep -Seconds 90
 
     # List out the licenses that failed to apply
     If ($FailedSkus) {
-                       Write-Host "Licenses that Failed to be applied to the user:" -ForegroundColor Red
+                       Write-Host ""
+                       Write-Host "Licenses that Failed to be applied to the user:" -ForegroundColor Red -BackgroundColor Blue
                        Write-Host ""
                         foreach ( $FailedSku in $FailedSkus ) {
-                                                               Write-Host "[$FailedSku]" -ForegroundColor Red
+                                                               Write-Host "--$FailedSku--" -ForegroundColor Red -BackgroundColor Blue
                                                                }
                         }
 
@@ -297,9 +335,74 @@ sleep -Seconds 90
 
 
 
+##### Send out emails to appropriate parties
+    # Find out who is running this script to generate the email's "From:" field
+    $OperatorDisplayName = $OperatorIdentity.DisplayName
+    $OperatorEmailAddress = $OperatorIdentity.EmailAddress
+        # Get the operator's email address if it cant be found
+        If ($OperatorEmailAddress) {} else {
+                                            Write-Host ""
+                                            $OperatorEmailAddress = Read-Host "Your email address could not be found in Active Directory. Please enter it now"
+                                            }
+    $emailFrom = "$OperatorDisplayName <$OperatorEmailAddress>"
 
 
 
+
+    # check to see if the new account's email is still being built or if it is still provisioning
+    Sleep -Seconds 15
+
+
+
+##### send email to the new user's manager and CC the user that includes the user's temporary password and a link to change it to their own password (maybe webmail login)
+
+    # Email server settings
+    $SmtpServer                 = 'checkcity-com.mail.protection.outlook.com'
+    $Port                       = '25' 
+    $DeliveryNotificationOption = 'OnFailure'
+    
+    # Generate Manager's variables
+    $ManagerCanonicalName = (Get-ADUser $Sam -Properties Manager | Select-Object Manager).Manager
+    $ManagerName = (Get-ADUser -Identity $ManagerCanonicalName).Name
+    $ManagerEmail = (Get-ADUser -Identity $ManagerCanonicalName).UserPrincipalName
+    
+    # Generate email body to manager [https://html-online.com/editor/]
+    $ManagerEmailBody = "
+    <p>Dear $ManagerName,</p>
+    <p>A new user account has been setup for $Firstname $Lastname. Please Print this out and give this to the employee on their first day. <span style=""text-decoration: underline;""><strong>Dont forward this email to their new address because they will not be able to login to their email without this password!</strong></span></p>
+    <p>Their new information is as follows:</p>
+    <ul>
+    <li style=""text-align: left;"">Username:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$Sam</li>
+    <li>Domain\user name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; checkcity\$Sam</li>
+    <li>eMail Address:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $emailAddress</li>
+    <li>Temporary Password:&nbsp; &nbsp; $NewUserTempPassword</li>
+    </ul>
+    <p>&nbsp;</p>
+    <p><span style=""background-color: #ffff00;"">PLEASE HAVE THE NEW EMPLOYEE CHANGE THIS PASSWORD ASAP ON THEIR FIRST DAY!</span></p>
+    <p><span style=""background-color: #ffff00;"">They can change the password <a style=""background-color: #ffff00;"" href=""https://adfs.checkcity.com"">here</a>.</span></p>
+    <p>&nbsp;</p>
+    <p>Any questions with logging in should be directed to the <a href=""https://helpdesk.checkcity.com"">Help Desk</a> (855-317-0694)</p>
+    <p>Thanks, <br />I.T. Department</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>This account was created by $OperatorDisplayName on $Date at $Time</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+        "
+
+    # Send email to manager
+    Write-Host "Emailing credentials to manager: $ManagerEmail" -ForegroundColor Yellow
+    Sleep -Seconds 60
+    Send-MailMessage -To $ManagerEmail -from $emailFrom -Cc $EmailAddress -Bcc $OperatorEmailAddress -Subject "A new user has been created:  $EmailAddress" -SmtpServer $SmtpServer -UseSsl -DeliveryNotificationOption $DeliveryNotificationOption -Port $Port -body $ManagerEmailBody -bodyasHTML -priority High
+    Send-MailMessage -To $OperatorEmailAddress -from $emailFrom -Subject "A new user has been created:  $EmailAddress" -SmtpServer $SmtpServer -UseSsl -DeliveryNotificationOption $DeliveryNotificationOption -Port $Port -body $ManagerEmailBody -bodyasHTML -priority High
+
+##### Log the new user, time created, and some metadata to an excel file in the housekeeping share
+
+
+
+
+
+#Get-MsolUser -UserPrincipalName $EmailAddress | Select-Object *
 
 
 }
@@ -307,5 +410,4 @@ sleep -Seconds 90
 
 
 
-
-
+}
