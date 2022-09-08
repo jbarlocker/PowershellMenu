@@ -391,9 +391,13 @@ sleep -Seconds 90
         "
 
     # Send email to manager
-    Write-Host "Emailing credentials to manager: $ManagerEmail" -ForegroundColor Yellow
+    
     Sleep -Seconds 60
-    Send-MailMessage -To $ManagerEmail -from $emailFrom -Cc $EmailAddress -Bcc $OperatorEmailAddress -Subject "A new user has been created:  $EmailAddress" -SmtpServer $SmtpServer -UseSsl -DeliveryNotificationOption $DeliveryNotificationOption -Port $Port -body $ManagerEmailBody -bodyasHTML -priority High
+    Write-Host "Emailing credentials to manager: $ManagerEmail" -ForegroundColor Yellow
+    Send-MailMessage -To $ManagerEmail -from $emailFrom -Subject "A new user has been created:  $EmailAddress" -SmtpServer $SmtpServer -UseSsl -DeliveryNotificationOption $DeliveryNotificationOption -Port $Port -body $ManagerEmailBody -bodyasHTML -priority High
+    Write-Host "Emailing credentials to user: $EmailAddress" -ForegroundColor Yellow
+    Send-MailMessage -To $EmailAddress -from $emailFrom -Subject "A new user has been created:  $EmailAddress" -SmtpServer $SmtpServer -UseSsl -DeliveryNotificationOption $DeliveryNotificationOption -Port $Port -body $ManagerEmailBody -bodyasHTML -priority High
+    Write-Host "Emailing credentials to operator: $OperatorEmailAddress" -ForegroundColor Yellow
     Send-MailMessage -To $OperatorEmailAddress -from $emailFrom -Subject "A new user has been created:  $EmailAddress" -SmtpServer $SmtpServer -UseSsl -DeliveryNotificationOption $DeliveryNotificationOption -Port $Port -body $ManagerEmailBody -bodyasHTML -priority High
 
 ##### Log the new user, time created, and some metadata to an excel file in the housekeeping share
