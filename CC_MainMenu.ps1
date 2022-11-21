@@ -53,7 +53,7 @@ Function ListMenu{
          Write-Host ""
          $MenuChoice = Read-Host "Select an option"
      }
-    until ($MenuChoice -match '[1-4,qQ,wtfWTF]')
+    until ($MenuChoice -match '[1-5,qQ,wtfWTF]')
     $Global:WindowsUpdates=$False
     $Global:DriverandFirmware=$False
     $Global:Confirm=$False
