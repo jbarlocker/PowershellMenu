@@ -1,8 +1,8 @@
-﻿############################################
+############################################
 #### Created on 14-SEP-2021
 #### Create by Jake Barlocker
 ####
-#### Edits:
+#### Edits:     21-NOV-2022 to fix an error running the get-childitem command via "invoke-command" as an admin
 ####
 ####
 ############################################
@@ -155,6 +155,8 @@ Get-PSSession
 # Ask the operator for how many days into the future that expirations should be searched for
 Write-Host " "
 $ExpiringInNumberOfDays = Read-Host "Find certificates expiring in How many days?"
+$FutureDate = (Get-Date).AddDays($ExpiringInNumberOfDays)
+$FutureExpirationDate = Get-Date -UFormat "%m/%d/%Y %r" -Date $FutureDate
 
 $Counter = 0
 
@@ -184,15 +186,19 @@ While ($Counter -lt $List_Of_Domains.Count) {
                                                                                Write-Host "     $CurrentDomain - $CounterPlusOne of $TotalDomainNumber" -ForegroundColor Green
 
                                                                                # Get a list of all certs expiring in XXX days or less
-                                                                               $RemoteCertificate = Invoke-Command -Credential $Credentials[$Counter] -ComputerName $server -ArgumentList $ExpiringInNumberOfDays { Param( $ExpiringInNumberOfDays ); Get-ChildItem -Path Cert:\LocalMachine\My -Recurse -ExpiringInDays $ExpiringInNumberOfDays}                                    
+                                                                               $RemoteCertificate = Invoke-Command -Credential $Credentials[$Counter] -ComputerName $server { Get-ChildItem -Path Cert:\LocalMachine\My -Recurse | Select-Object *}
                                                                                
                                                                                # add each certificate to the array
                                                                                foreach ($cert in $RemoteCertificate) {
                                                                                                                       $Certificates += New-Object -TypeName PSObject -Property ([ordered]@{
                                                                                                                                                                                            'Server'=$server;
+                                                                                                                                                                                           'PSComputerName'=$cert.PSComputerName;
                                                                                                                                                                                            'Certificate'=$cert.Issuer;
-                                                                                                                                                                                           'Expiry Date'=$cert.NotAfter;
-                                                                                                                                                                                           'Friendly Name'=$cert.FriendlyName;
+                                                                                                                                                                                           'ValidDate'=[DateTime]$cert.NotBefore;
+                                                                                                                                                                                           'ExpiryDate'=[DateTime]$cert.NotAfter;
+                                                                                                                                                                                           'FriendlyName'=$cert.FriendlyName;
+                                                                                                                                                                                           'DNSNameList'=$cert.DnsNameList;
+                                                                                                                                                                                           'HasPrivateKey'=$cert.HasPrivateKey;
                                                                                                                                                                                            'Thumbprint'=$cert.Thumbprint
                                                                                                                                                                                            })
                                                                                                                       }
@@ -208,7 +214,7 @@ While ($Counter -lt $List_Of_Domains.Count) {
 
 
 # Dump the array to an excel file
-$Certificates | Export-Excel -Path $FilePath -TitleBold -WorksheetName ExpiringCertificates -AutoSize
+$Certificates | Where-Object ExpiryDate -lt $FutureExpirationDate | Sort-Object ExpiryDate | Export-Excel -Path $FilePath -TitleBold -WorksheetName ExpiringCertificates -AutoSize
 
 
 
@@ -217,4 +223,3 @@ Get-PSSession | Remove-PSSession
 
 
 }
-
