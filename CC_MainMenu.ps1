@@ -46,8 +46,7 @@ Function ListMenu{
          Write-Host "Enter '3' - Create new user in the checkcity.local domain"
          Write-Host "Enter '4' - Reset the Local Admin Password on all domain joined computers"
          Write-Host "Enter '5' - Scan domain servers for expiring certificates"
-         #Write-Host "Enter '5' - Choice5"
-         #Write-Host "Enter '6' - Choice6"
+         Write-Host "Enter '6' - Reset your passwords on all domains"
          #Write-Host "Enter '7' - Choice7"
          Write-Host "Enter 'Q' to Quit"
          Write-Host ""
@@ -73,13 +72,10 @@ Function ListMenu{
     if($MenuChoice -match 5){
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Scan_Domain_Servers_for_Expiring_Certificates";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/Scan_Domain_Servers_for_Expiring_Certificates.ps1'));Scan_for_Certs
     }
-<#    if($MenuChoice -match 5){
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="LogCollector";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DellProSupportGse/Tools/main/LogCollector.ps1'));Invoke-LogCollector
-    }
     if($MenuChoice -match 6){
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="RunDrifT";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DellProSupportGse/Tools/main/rundrift.ps1'));Invoke-RunDrifT
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Reset_a_users_password_on_all_domains.ps1";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/Reset_a_users_password_on_all_domains.ps1'));ResetAllDomainsPasswords
     }
-    if($MenuChoice -match 7){
+<#    if($MenuChoice -match 7){
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="RunCluChk";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DellProSupportGse/Tools/main/RunCluChk.ps1'));Invoke-RunCluChk
     }
 #>
