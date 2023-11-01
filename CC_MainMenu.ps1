@@ -47,12 +47,12 @@ Function ListMenu{
          Write-Host "Enter '4' - Reset the Local Admin Password on all domain joined computers"
          Write-Host "Enter '5' - Scan domain servers for expiring certificates"
          Write-Host "Enter '6' - Reset your passwords on all domains"
-         #Write-Host "Enter '7' - Choice7"
+         Write-Host "Enter '7' - Setup Automated Health Maintenance Tasks on local computer"
          Write-Host "Enter 'Q' to Quit"
          Write-Host ""
          $MenuChoice = Read-Host "Select an option"
      }
-    until ($MenuChoice -match '[1-6,qQ,wtfWTF]')
+    until ($MenuChoice -match '[1-7,qQ,wtfWTF]')
     $Global:WindowsUpdates=$False
     $Global:DriverandFirmware=$False
     $Global:Confirm=$False
@@ -75,10 +75,10 @@ Function ListMenu{
     if($MenuChoice -match 6){
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Reset_a_users_password_on_all_domains.ps1";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/Reset_a_users_password_on_all_domains.ps1'));ResetAllDomainsPasswords
     }
-<#    if($MenuChoice -match 7){
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="RunCluChk";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DellProSupportGse/Tools/main/RunCluChk.ps1'));Invoke-RunCluChk
+    if($MenuChoice -match 7){
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Create_Scheduled_Tasks_for_DISM_SFC_and_Weekly_Reboot.ps1";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DellProSupportGse/Tools/main/Create_Scheduled_Tasks_for_DISM_SFC_and_Weekly_Reboot.ps1'));CreateScheduledTasks
     }
-#>
+
     if($MenuChoice -imatch 'q'){
         Write-Host "Ending..." -ForegroundColor Red
         EndScript
