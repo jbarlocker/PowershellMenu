@@ -52,7 +52,7 @@ Function ListMenu{
          Write-Host ""
          $MenuChoice = Read-Host "Select an option"
      }
-    until ($MenuChoice -match '[1-7,qQ,wtfWTF]')
+    until ($MenuChoice -match '[1-7,qQ,wtfWTF,dontyoueverDONTYOUEVER]')
     $Global:WindowsUpdates=$False
     $Global:DriverandFirmware=$False
     $Global:Confirm=$False
@@ -85,6 +85,10 @@ Function ListMenu{
     }
         if($MenuChoice -imatch 'wtf'){
         Start-Process https://www.youtube.com/watch?v=lUVQz6_-vxc
+        EndScript
+    }
+        if($MenuChoice -imatch 'dontyouever'){
+        Start-Process https://www.youtube.com/watch?v=yEpvdKTKiNc
         EndScript
     }
 }#End of ShowMenu
