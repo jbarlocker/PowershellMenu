@@ -11,7 +11,7 @@
 #########################################################################
 
 
-
+Function CreateScheduledTasks {
 
 # Check to see if powershell is running as an admin, and if not then stop the script.
     if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
@@ -59,5 +59,7 @@ if ($WantsWeeklyReboot -eq "y"){
                                 }
 
 
+
+}
 
 }
