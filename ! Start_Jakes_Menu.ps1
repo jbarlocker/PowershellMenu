@@ -1,4 +1,4 @@
-﻿############################################################
+############################################################
 ###   
 ###   Created by:  Jake Barlocker
 ###   Created on:  29-APR-2022
@@ -42,7 +42,14 @@ if ($JoinedToDomain -eq $False) {
 $OsName = (Get-WMIObject win32_operatingsystem).caption
 
 
+
+$InstallRSAT = Read-Host "Do you want to install Remote Server Administration Tools (RSAT) on this computer? (y/n)"
+$InstallRSAT = $InstallRSAT.ToLower()
+
+
+
 # Check to see if RSAT tools are installed, and install them if they arent.
+if ($WantsWeeklyReboot -eq "y"){
 if ($OsName -notlike "*server*") {
                                   $RsatToolList = Get-WindowsCapability -Name RSAT* -Online | Select-Object -Property *
                                   foreach ($Tool in $RsatToolList){
@@ -55,6 +62,7 @@ if ($OsName -notlike "*server*") {
                                  } ELSE {
                                          Install-WindowsFeature RSAT
                                          }
+                                }
 
 
 
