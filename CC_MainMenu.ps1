@@ -76,7 +76,7 @@ Function ListMenu{
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Reset_a_users_password_on_all_domains.ps1";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/Reset_a_users_password_on_all_domains.ps1'));ResetAllDomainsPasswords
     }
     if($MenuChoice -match 7){
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Create_Scheduled_Tasks_for_DISM_SFC_and_Weekly_Reboot.ps1";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DellProSupportGse/Tools/main/Create_Scheduled_Tasks_for_DISM_SFC_and_Weekly_Reboot.ps1'));CreateScheduledTasks
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Create_Scheduled_Tasks_for_DISM_SFC_and_Weekly_Reboot.ps1";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/Create_Scheduled_Tasks_for_DISM_SFC_and_Weekly_Reboot.ps1'));CreateScheduledTasks
     }
 
     if($MenuChoice -imatch 'q'){
