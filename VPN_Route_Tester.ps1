@@ -98,3 +98,4 @@ Test-AllConnections
 
 $ResultTable | Out-GridView
 
+}
