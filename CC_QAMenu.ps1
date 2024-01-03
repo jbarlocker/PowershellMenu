@@ -60,7 +60,7 @@ Function ListMenu{
     $Global:Confirm=$False
 
     if($MenuChoice -match 1){
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Test_Subnets";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://github.com/jbarlocker/PowershellMenu/blob/main/VPN_Route_Tester.ps1'));Test_Subnets
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Test_Subnets";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/VPN_Route_Tester.ps1'));Test_Subnets
     }
     if($MenuChoice -match 2){
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Sync_AD_and_AzureAD";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/Sync_AD_and_AzureAD.ps1'));SyncAllActiveDirectory
