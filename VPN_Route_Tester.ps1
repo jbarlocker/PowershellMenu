@@ -35,7 +35,6 @@ $Endpoints = @(
                [pscustomobject]@{Group="Databank";Name="VLAN 172";IpAddress='10.127.172.1'}
                [pscustomobject]@{Group="Databank";Name="VLAN 190";IpAddress='10.127.190.1'}
                [pscustomobject]@{Group="Databank";Name="VLAN 192";IpAddress='10.127.192.1'}
-
                [pscustomobject]@{Group="Corporate";Name="VLAN CCHQ-10";IpAddress='10.130.10.1'}
                [pscustomobject]@{Group="Corporate";Name="VLAN CCHQ-11";IpAddress='10.130.11.1'}
                [pscustomobject]@{Group="Corporate";Name="VLAN CCHQ-12";IpAddress='10.130.12.1'}
@@ -43,7 +42,6 @@ $Endpoints = @(
                [pscustomobject]@{Group="Corporate";Name="VLAN 26";IpAddress='10.130.26.1'}
                [pscustomobject]@{Group="Corporate";Name="VLAN 43";IpAddress='10.130.43.1'}
                [pscustomobject]@{Group="Corporate";Name="VLAN 44";IpAddress='10.130.44.1'}
-
                [pscustomobject]@{Group="Stores";Name="Store U20 Router";IpAddress='10.133.2.1'}
                [pscustomobject]@{Group="Stores";Name="Store U40 Router";IpAddress='10.133.4.1'}
                [pscustomobject]@{Group="Stores";Name="Store U50 Router";IpAddress='10.133.5.1'}
@@ -72,10 +70,6 @@ $Endpoints = @(
                [pscustomobject]@{Group="Stores";Name="Store U290 Router";IpAddress='10.133.29.1'}
                [pscustomobject]@{Group="Stores";Name="Store U300 Router";IpAddress='10.133.30.1'}
                [pscustomobject]@{Group="Stores";Name="Store U300 Router";IpAddress='10.133.30.1'}
-
-
-               [pscustomobject]@{Group="Local Subnet";Name="Jakes router";IpAddress='10.11.0.1'}
-               [pscustomobject]@{Group="Local Subnet";Name="Jakes webpowerswitchpro";IpAddress='10.11.0.77'}
                [pscustomobject]@{Group="Internet";Name="google dns";IpAddress='8.8.8.8'}
                [pscustomobject]@{Group="Internet";Name="cloudflare dns";IpAddress='1.1.1.1'}
                [pscustomobject]@{Group="Internet";Name="Level3 dns";IpAddress='4.2.2.1'}
