@@ -39,7 +39,7 @@ Function ListMenu{
 
          Remove-Variable MenuChoice -ErrorAction SilentlyContinue
          Clear-Host
-         Write-Host $Title -ForegroundColor Cyan
+         Write-Host $Title -ForegroundColor Cyan -BackgroundColor Black
          Write-Host ""
          Write-Host "Enter '1' - VPN Tester - Ping all subnets"
          <#Write-Host "Enter '2' - Sync all domain controllers, then sync to AzureAD"
