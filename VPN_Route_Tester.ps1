@@ -25,6 +25,8 @@ Function Test_Subnets {
 
 Write-Host "Please wait while the script runs.  It can take upwards of 5 minutes..." -ForegroundColor Cyan -BackgroundColor DarkGray
 
+Write-Host "Running..." -ForegroundColor Yellow
+
 $Endpoints = @( 
                [pscustomobject]@{Group="Databank";Name="VLAN 43";IpAddress='10.127.43.1'}
                [pscustomobject]@{Group="Databank";Name="VLAN 74";IpAddress='10.127.74.10'}
