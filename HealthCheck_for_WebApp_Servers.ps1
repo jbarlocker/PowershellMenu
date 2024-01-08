@@ -19,6 +19,7 @@
 Function Start_Health_Check{
 Clear
 
+Write-Host "Running..." -ForegroundColor Yellow
 
 # Populate variable for the time at the begininng of the script
 $StartTime = (Get-Date)
