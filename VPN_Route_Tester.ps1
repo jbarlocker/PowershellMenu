@@ -23,6 +23,8 @@
 
 Function Test_Subnets {
 
+Clear
+
 Write-Host "Please wait while the script runs.  It can take upwards of 5 minutes..." -ForegroundColor Cyan -BackgroundColor DarkGray
 
 Write-Host "Running..." -ForegroundColor Yellow
