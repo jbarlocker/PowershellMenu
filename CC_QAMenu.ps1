@@ -1,4 +1,4 @@
-﻿######################################################################
+######################################################################
 ###   
 ###   Created By: Jake Barlocker
 ###   Created on:  3-JAN-2024
@@ -42,8 +42,8 @@ Function ListMenu{
          Write-Host $Title -ForegroundColor Cyan -BackgroundColor Black
          Write-Host ""
          Write-Host "Enter '1' - VPN Tester - Ping all subnets"
-         <#Write-Host "Enter '2' - Sync all domain controllers, then sync to AzureAD"
-         Write-Host "Enter '3' - Create new user in the checkcity.local domain"
+         Write-Host "Enter '2' - Run a health check for websites on the webapp servers"
+<#         Write-Host "Enter '3' - Create new user in the checkcity.local domain"
          Write-Host "Enter '4' - Reset the Local Admin Password on all domain joined computers"
          Write-Host "Enter '5' - Scan domain servers for expiring certificates"
          Write-Host "Enter '6' - Reset your passwords on all domains"
@@ -63,7 +63,7 @@ Function ListMenu{
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Test_Subnets";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/VPN_Route_Tester.ps1'));Test_Subnets
     }
     if($MenuChoice -match 2){
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Sync_AD_and_AzureAD";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/Sync_AD_and_AzureAD.ps1'));SyncAllActiveDirectory
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Start_Health_Check";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/HealthCheck_for_WebApp_Servers.ps1'));Start_Health_Check
     }
     if($MenuChoice -match 3){
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Create_New_AD_User";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/Create_New_AD_User.ps1'));Create_New_AD_User
