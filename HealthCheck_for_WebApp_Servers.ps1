@@ -104,6 +104,10 @@ $Endpoints = @(
                [pscustomobject]@{Server="LoadBalancer";Protocol="HTTPS";Site="wapi-ut";Binding="lb-ut-wapi.checkcity.com";Page="/api/v1/version"}
                [pscustomobject]@{Server="ProductionURL";Protocol="HTTP";Site="wapi-ut";Binding="ut-wapi.checkcity.com";Page="/api/v1/version"}
                [pscustomobject]@{Server="ProductionURL";Protocol="HTTPS";Site="wapi-ut";Binding="ut-wapi.checkcity.com";Page="/api/v1/version"}
+               [pscustomobject]@{Server="CCDBWebApp02";Protocol="HTTPS";Site="dsu-va";Binding="dsu-va02.checkcity.com";Page="/api/v1/version"}
+               [pscustomobject]@{Server="CCDBWebApp03";Protocol="HTTPS";Site="dsu-va";Binding="dsu-va03.checkcity.com";Page="/api/v1/version"}
+               [pscustomobject]@{Server="LoadBalancer";Protocol="HTTPS";Site="dsu-va";Binding="lb-dsu-va.checkcity.com";Page="/api/v1/version"}
+               [pscustomobject]@{Server="ProductionURL";Protocol="HTTPS";Site="dsu-va";Binding="dsu-va.checkcity.com";Page="/api/v1/version"}               
                )
 
 
