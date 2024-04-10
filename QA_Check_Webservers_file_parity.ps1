@@ -1,4 +1,4 @@
-﻿#################################################################################
+#################################################################################
 ###   
 ###   Created On:  9-JAN-2024
 ###   Created By:  Jake Barlocker
@@ -46,8 +46,8 @@ Remove-Variable ResultsArray -ErrorAction SilentlyContinue
 $ResultsArray = @()
 
                                   # create sessions to IIS Servers
-                                  $Session01 = New-PSSession -ComputerName $IISservers[0]
-                                  $Session02 = New-PSSession -ComputerName $IISservers[1]
+                                  $Session01 = New-PSSession -ComputerName $IISservers[0] -Credential $Credential
+                                  $Session02 = New-PSSession -ComputerName $IISservers[1] -Credential $Credential
 
                                   # Get a list of sites from IIS on the first server
                                   $Sites01 = Invoke-Command -Session $Session01 { Import-Module WebAdministration; Get-Childitem -Path IIS:\Sites }
