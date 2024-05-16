@@ -48,12 +48,13 @@ Function ListMenu{
          Write-Host "Enter '5' - Scan domain servers for expiring certificates"
          Write-Host "Enter '6' - Reset your passwords on all domains"
          Write-Host "Enter '7' - Setup Automated Health Maintenance Tasks on local computer"
+         Write-Host "Enter '8' - Update Windows on all domain joined computers"
          Write-Host "Enter 'QA' - Enter the Quality Assurance and Testing Submenu"
          Write-Host "Enter 'Q' to Quit"
          Write-Host ""
          $MenuChoice = Read-Host "Select an option"
      }
-    until ($MenuChoice -match '[1-7,qQ,wtfWTF,dontyoueverDONTYOUEVER,qaQA]')
+    until ($MenuChoice -match '[1-8,qQ,wtfWTF,dontyoueverDONTYOUEVER,qaQA]')
     $Global:WindowsUpdates=$False
     $Global:DriverandFirmware=$False
     $Global:Confirm=$False
@@ -78,6 +79,9 @@ Function ListMenu{
     }
     if($MenuChoice -match 7){
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Create_Scheduled_Tasks_for_DISM_SFC_and_Weekly_Reboot.ps1";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/Create_Scheduled_Tasks_for_DISM_SFC_and_Weekly_Reboot.ps1'));CreateScheduledTasks
+    }
+    if($MenuChoice -match 8){
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="Run_Windows_Updates_On_Domain_Computers.ps1";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/Run_Windows_Updates_On_Domain_Computers.ps1'));RunWindowsUpdates
     }
     if($MenuChoice -match 'qa'){
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-Expression('$module="QA-Menu";$repo="PowershellScripts"'+(new-object net.webclient).DownloadString('https://raw.githubusercontent.com/jbarlocker/PowershellMenu/main/CC_QAMenu.ps1'));QA-Menu
