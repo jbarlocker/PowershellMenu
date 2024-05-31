@@ -23,7 +23,6 @@ $List_Of_Domains = @(
                    'ccoc7.com',
                    'ccoc7test.com',
                    'checkcity.local',
-                   'checkcitynevada.com',
                    'checkcitynv.com',
                    'softwise.co'
                    )
