@@ -66,6 +66,8 @@ While ($Counter -ne $List_Of_Domains.Count) {
                                              $CurrentDomain = $List_Of_Domains[$Counter]
                                              $DomainController = Get-ADDomainController -DomainName $CurrentDomain -Discover
                                              $DomainControllerFQDN += $DomainController.Name + "." + $DomainController.Domain
+
+                                             Write-Host $DomainController -ForegroundColor Green                                             
                                              
                                              $Counter++
                                              }
