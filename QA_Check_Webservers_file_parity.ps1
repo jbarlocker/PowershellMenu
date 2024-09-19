@@ -5,7 +5,7 @@
 ###   
 ###   This script will compare the data for all sites on both servers.
 ###   
-###   
+###   EDITS:   19-SEP-2024 - add code to get a list of files if any are not the same size for MakI.
 ###   
 ###   
 #################################################################################
@@ -38,12 +38,16 @@ $IISservers = @(
                 "CCDBWebApp03.checkcity.local";
                 )
 
+$Server01ColumnSizeLabel = $IISservers[0].Split(".")[0] + "_Size"
+$Server02ColumnSizeLabel = $IISservers[1].Split(".")[0] + "_Size"
+
 
 # Delete the variable in case this script is being tested and already has data in it
-Remove-Variable ResultsArray -ErrorAction SilentlyContinue
+Remove-Variable ResultsArray, FileResultsArray -ErrorAction SilentlyContinue
 
 # Create the array for results
 $ResultsArray = @()
+$FileSizeMismatchResultsArray = @()
 
                                   # create sessions to IIS Servers
                                   $Session01 = New-PSSession -ComputerName $IISservers[0] -Credential $Credential
@@ -58,8 +62,8 @@ $ResultsArray = @()
 
                                   Foreach ($Site in $Sites01){
                                                               # Get the file data from each server
-                                                              $SiteFilesFromServer01 = Invoke-Command -Session $Session01 { Get-ChildItem -Path $Using:Site.physicalPath -ErrorAction SilentlyContinue }
-                                                              $SiteFilesFromServer02 = Invoke-Command -Session $Session02 { Get-ChildItem -Path $Using:Site.physicalPath -ErrorAction SilentlyContinue }
+                                                              $SiteFilesFromServer01 = Invoke-Command -Session $Session01 { Get-ChildItem -Path $Using:Site.physicalPath -ErrorAction SilentlyContinue -Recurse | Select-Object -Property * }
+                                                              $SiteFilesFromServer02 = Invoke-Command -Session $Session02 { Get-ChildItem -Path $Using:Site.physicalPath -ErrorAction SilentlyContinue -Recurse | Select-Object -Property * }
                                                               
                                                               # Calculate the file data for each server
                                                               $FileInformationFromServer01 = $SiteFilesFromServer01 | Measure-Object -Property Length -sum
@@ -69,6 +73,19 @@ $ResultsArray = @()
                                                               $FileSizeSame = If ($FileInformationFromServer01.Sum -eq $FileInformationFromServer02.Sum) {"Yes"} else {"Not Same"}
                                                               $FileCountSame = If ($FileInformationFromServer01.Count -eq $FileInformationFromServer02.Count) {"Yes"} else {"Not Same"}
 
+                                                              If ($FileInformationFromServer01.Sum -ne $FileInformationFromServer02.Sum) {
+                                                                                                                                          Foreach ($File in $SiteFilesFromServer01) {
+                                                                                                                                                                                     $FileFromServer01Size = $File.Length
+                                                                                                                                                                                     $FileFromServer02Size = ($SiteFilesFromServer02 | Where-Object {$_.Fullname -eq $File.FullName}).Length
+                                                                                                                                                                                     If ( $FileFromServer01Size -ne $FileFromServer02Size ) {
+                                                                                                                                                                                                                                             $FileSizeMismatchResultsArray += [pscustomobject]@{
+                                                                                                                                                                                                                                                                                                FullPath = $File.FullName
+                                                                                                                                                                                                                                                                                                $Server01ColumnSizeLabel = $FileFromServer01Size
+                                                                                                                                                                                                                                                                                                $Server02ColumnSizeLabel = $FileFromServer02Size
+                                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                            }
+                                                                                                                                                                                    }
+                                                                                                                                         }
                                                               # Add all the calculated data to the results array
                                                               $ResultsArray += [pscustomobject]@{
                                                                                                  SiteName = $Site.name
@@ -97,7 +114,7 @@ Write-Host "This script took this long to run: " $($EndTime - $StartTime) -Foreg
 
 # output the result in gridview
 $ResultsArray | Out-GridView
-
+$FileSizeMismatchResultsArray | Out-GridView
 
 
 }
