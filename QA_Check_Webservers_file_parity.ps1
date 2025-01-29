@@ -20,7 +20,7 @@ Function Webserver_File_Parity_Check {
 Clear
 
 # get the credentials of the user running the script.
-$Credential = Get-Credential -UserName "checkcity\" -Message "Enter your credentials."
+IF (!$Credential) {$Credential = Get-Credential -UserName "checkcity\" -Message "Enter your credentials."}
 
 
 
