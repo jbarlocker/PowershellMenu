@@ -46,7 +46,7 @@ $Server02ColumnSizeLabel = $IISservers[1].Split(".")[0] + "_Size"
 Remove-Variable ResultsArray, FileResultsArray -ErrorAction SilentlyContinue
 
 # Create the array for results
-$ResultsArray = @()
+$ResultsArray = New-Object System.Collections.Generic.List[System.Object]
 $FileSizeMismatchResultsArray = @()
 
                                   # create sessions to IIS Servers
@@ -87,7 +87,7 @@ $FileSizeMismatchResultsArray = @()
                                                                                                                                                                                     }
                                                                                                                                          }
                                                               # Add all the calculated data to the results array
-                                                              $ResultsArray += [pscustomobject]@{
+                                                              $ResultsArray.Add([pscustomobject]@{
                                                                                                  SiteName = $Site.name
                                                                                                  Path = $Site.physicalPath
                                                                                                  CCDBWebApp02FileSize = $FileInformationFromServer01.Sum
@@ -96,7 +96,7 @@ $FileSizeMismatchResultsArray = @()
                                                                                                  CCDBWebApp02NumberOfFiles = $FileInformationFromServer01.Count
                                                                                                  CCDBWebApp03NumberOfFiles = $FileInformationFromServer02.Count
                                                                                                  FileCountSame = $FileCountSame
-                                                                                                 }
+                                                                                                 } )
 
                                                               }
                                   
